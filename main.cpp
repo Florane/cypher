@@ -7,10 +7,10 @@
 int main()
 {
 	CBC cbc(new AES);
-	std::ifstream input("input");
-	std::ofstream output("output");
+	std::ifstream input("output");
+	std::ofstream output("outtput");
 	std::string key = "0";
-	cbc.encrypt(output, input, key);
+	cbc.decrypt(output, input, 1000, key);
 
 	return 0;
 }

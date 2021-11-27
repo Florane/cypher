@@ -95,36 +95,42 @@ void AES::addRoundKey(unsigned char* input, int round)
 
 void AES::encrypt(unsigned char* output, unsigned char* input, unsigned char* key)
 {
+    unsigned char buffer[blockSize];
+    for(int i = 0;i < blockSize;i++)
+        buffer[i] = input[i];
     shiftRoundKey(key);
     for(int i = 0;i < 9;i++)
     {
-        addRoundKey(input,i);
-        subBytes(input);
-        shiftRows(input);
-        mixColumns(input);
+        addRoundKey(buffer,i);
+        subBytes(buffer);
+        shiftRows(buffer);
+        mixColumns(buffer);
     }
-    addRoundKey(input,9);
-    subBytes(input);
-    shiftRows(input);
-    addRoundKey(input,10);
+    addRoundKey(buffer,9);
+    subBytes(buffer);
+    shiftRows(buffer);
+    addRoundKey(buffer,10);
     for(int i = 0;i < blockSize;i++)
-        output[i] = input[i];
+        output[i] = buffer[i];
 }
 
 void AES::decrypt(unsigned char* output, unsigned char* input, unsigned char* key)
 {
+    unsigned char buffer[blockSize];
+    for(int i = 0;i < blockSize;i++)
+        buffer[i] = input[i];
     shiftRoundKey(key);
-    addRoundKey(input,10);
+    addRoundKey(buffer,10);
     for(int i = 9;i > 0;i--)
     {
-        invShiftRows(input);
-        invSubBytes(input);
-        addRoundKey(input,i);
-        invMixColumns(input);
+        invShiftRows(buffer);
+        invSubBytes(buffer);
+        addRoundKey(buffer,i);
+        invMixColumns(buffer);
     }
-    invShiftRows(input);
-    invSubBytes(input);
-    addRoundKey(input,0);
+    invShiftRows(buffer);
+    invSubBytes(buffer);
+    addRoundKey(buffer,0);
     for(int i = 0;i < blockSize;i++)
-        output[i] = input[i];
+        output[i] = buffer[i];
 }

@@ -5,8 +5,8 @@
 
 void CBC::encrypt(std::ostream& output, std::istream& input, std::string key)
 {
-    char block[size];
-    char initVector[size];
+    u_char block[size];
+    u_char initVector[size];
 
     std::random_device rd;
     std::mt19937_64 gen(rd());
@@ -14,37 +14,37 @@ void CBC::encrypt(std::ostream& output, std::istream& input, std::string key)
     for(int i = 0; i < size;i++)
         initVector[i] = randint(gen);
 
-    output.write(initVector, size);
-    while(input.read(block,size))
+    output.write(reinterpret_cast<char*>(initVector), size);
+    while(input.readsome(reinterpret_cast<char*>(block),size))
     {
-        char buffer[size];
+        u_char buffer[size];
         for(int i = 0;i < size;i++)
             buffer[i] = block[i]^initVector[i];
         method->encrypt(initVector,buffer,method->expandKey(key.c_str()));
-        output.write(initVector, size);
+        output.write(reinterpret_cast<char*>(initVector), size);
     }
 }
 
 void CBC::decrypt(std::ostream& output, std::istream& input, size_t blocks, std::string key)
 {
     std::vector<std::thread*> blockThreads;
-    std::vector<char*> blockOutputs;
-    std::vector<char*> blockInputs;
-    blockInputs.push_back(new char[size]);
-    input.read(blockInputs[0], size);
+    std::vector<u_char*> blockOutputs;
+    std::vector<u_char*> blockInputs;
+    blockInputs.push_back(new u_char[size]);
+    input.read(reinterpret_cast<char*>(blockInputs[0]), size);
     for(size_t i = 1;i < blocks;i++)
     {
-        blockOutputs.push_back(new char[size]);
-        blockInputs.push_back(new char[size]);
-        input.read(blockInputs[i], size);
+        blockOutputs.push_back(new u_char[size]);
+        blockInputs.push_back(new u_char[size]);
+        input.read(reinterpret_cast<char*>(blockInputs[i]), size);
         blockThreads.push_back(new std::thread(&Method::decrypt, method, blockOutputs[i-1], blockInputs[i], method->expandKey(key.c_str())));
     }
     for(size_t i = 0;i < blocks-1;i++)
     {
         blockThreads[i]->join();
-        char buffer[size];
+        u_char buffer[size];
         for(int j = 0;j < size;j++)
             buffer[j] = blockOutputs[i][j]^ blockInputs[i][j];
-        output.write(buffer, size);
+        output.write(reinterpret_cast<char*>(buffer), size);
     }
 }

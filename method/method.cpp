@@ -1,6 +1,6 @@
 #include "method.hpp"
 
-unsigned char* Method::expandKey(const unsigned char* key)
+unsigned char* Method::expandKey(const char* key)
 {
     unsigned char* ret = new unsigned char[blockSize];
     for(int i = 0, j = 0;i < blockSize;i++,j++)
