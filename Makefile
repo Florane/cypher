@@ -1,7 +1,7 @@
 RUN=g++
 CFLAGS=-std=c++20 -g -c
 LIBRARIES=-pthread
-SOURCES=method/test.cpp mode/cbc.cpp main.cpp
+SOURCES=method/method.cpp method/aesLookup.cpp method/aes.cpp mode/cbc.cpp main.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXEC=run
 

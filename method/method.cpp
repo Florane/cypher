@@ -1,8 +1,8 @@
-#include "test.hpp"
+#include "method.hpp"
 
-char* Test::expandKey(const char* key)
+unsigned char* Method::expandKey(const unsigned char* key)
 {
-    char* ret = new char[blockSize];
+    unsigned char* ret = new unsigned char[blockSize];
     for(int i = 0, j = 0;i < blockSize;i++,j++)
     {
         if(key[j] == '\0')
@@ -12,14 +12,14 @@ char* Test::expandKey(const char* key)
     return ret;
 }
 
-void Test::encrypt(char* output, char* input, char* key)
+void Method::encrypt(unsigned char* output, unsigned char* input, unsigned char* key)
 {
     for(int i = 0;i < blockSize;i++)
         output[i] = input[i]^key[i];
     // delete key;
 }
 
-void Test::decrypt(char* output, char* input, char* key)
+void Method::decrypt(unsigned char* output, unsigned char* input, unsigned char* key)
 {
     for(int i = 0;i < blockSize;i++)
         output[i] = input[i]^key[i];

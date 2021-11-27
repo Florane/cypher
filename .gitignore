@@ -1,5 +1,6 @@
 *.o
 run
 .obsidian
+.vscode
 input
 output
