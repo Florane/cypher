@@ -5,7 +5,11 @@ SOURCES=method/method.cpp method/aesLookup.cpp method/aes.cpp mode/cbc.cpp main.
 OBJECTS=$(SOURCES:.cpp=.o)
 EXEC=run
 
-all: $(SOURCES) $(EXEC)
+all: subdirs $(SOURCES) $(EXEC)
+
+subdirs: 
+	+$(MAKE) -C method
+	+$(MAKE) -C mode
 
 $(EXEC): $(OBJECTS)
 	$(RUN) $(LIBRARIES) $(OBJECTS) -o $(EXEC)
@@ -14,4 +18,5 @@ $(EXEC): $(OBJECTS)
 	$(RUN) $(CFLAGS) $<
 
 clean:
-	rm -rf *.o $(EXEC)
+	find . -name \*.o -type f -delete
+	find . -name \$(EXEC) -type f -delete

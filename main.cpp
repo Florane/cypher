@@ -8,7 +8,7 @@ int main()
 {
 	CBC cbc(new AES);
 	std::ifstream input("output");
-	std::ofstream output("outtput");
+	std::ofstream output("output0");
 	std::string key = "0";
 	cbc.decrypt(output, input, 1000, key);
 
