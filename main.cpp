@@ -6,11 +6,11 @@
 
 int main()
 {
-	CBC cbc(new AES);
+	Mode* cbc = new CBC(new AES);
 	std::ifstream input("output");
 	std::ofstream output("output0");
 	std::string key = "0";
-	cbc.decrypt(output, input, 1000, key);
+	cbc->decrypt(output, input, key);
 
 	return 0;
 }

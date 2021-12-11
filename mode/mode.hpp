@@ -13,6 +13,6 @@ public:
     Mode() : Mode(new Method()) {}
 
     virtual void encrypt(std::ostream& output, std::istream& input, std::string key) {}
-    virtual void decrypt(std::ostream& output, std::istream& input, std::string key) {}
+    virtual void decrypt(std::ostream& output, std::istream& input, std::string key);
     virtual void decrypt(std::ostream& output, std::istream& input, size_t blocks, std::string key) {}
 };
