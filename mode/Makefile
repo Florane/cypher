@@ -1,7 +1,7 @@
 RUN=g++
 CFLAGS=-std=c++20 -g -c
 LIBRARIES=-pthread
-SOURCES=mode.cpp cbc.cpp main.cpp
+SOURCES=mode.cpp cbc.cpp cfb.cpp main.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXEC=run
 
