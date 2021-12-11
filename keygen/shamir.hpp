@@ -1,5 +1,4 @@
 #pragma once
-#include <iostream>
 #include <vector>
 #include "InfInt.h"
 
@@ -15,8 +14,8 @@ public:
     Shamir(int r, int q) : required(r), produced(q) {}
     Shamir() : Shamir(3,5) {}
 
-    void split(std::string &key, InfInt *piecestreams);
-    void glue(InfInt *shares, int *parts, std::string &key);
+    void split(std::string &key, std::string *piecestreams);
+    void glue(std::string *shares, int *parts, std::string &key);
 
     int producedCount() {return produced;}
     int requiredCount() {return required;}

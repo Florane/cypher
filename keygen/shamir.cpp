@@ -46,7 +46,7 @@ InfInt Shamir::getShare()
     return ret;
 }
 
-void Shamir::split(std::string &key, InfInt *piecestreams)
+void Shamir::split(std::string &key, std::string *piecestreams)
 {
     InfInt shares[required];
     shares[0] = bitString(key);
@@ -57,12 +57,13 @@ void Shamir::split(std::string &key, InfInt *piecestreams)
     {
         for(int x = 0;x < required;x++)
             points[i]+=(shares[x]*pow((i+1),x));
+            points[i]%=prime;
     }
     for(int i = 0;i < produced;i++)
-        piecestreams[i] = points[i];
+        piecestreams[i] = points[i].toString();
 }
 
-void Shamir::glue(InfInt *shares, int *parts, std::string &key)
+void Shamir::glue(std::string *shares, int *parts, std::string &key)
 {
     InfInt keyInt(1); // кажется, в имплементации больших чисел существует сильная погрешность. это позволяет восстановить ключ (вроде-бы) гарантированно?
     for(int i = 0;i < required;i++)
@@ -71,19 +72,14 @@ void Shamir::glue(InfInt *shares, int *parts, std::string &key)
         for(int j = 0;j < required;j++)
             if(i != j)
             {
-                std::cout << y << " ";
                 int denom = parts[i]-parts[j];
-                std::cout << denom << " ";
                 y*=(-parts[j]);
-                std::cout << y << " ";
                 y/=denom;
-                std::cout << y << std::endl;
             }
-        std::cout << std::endl;
         keyInt += y;
     }
-    std::cout << keyInt << " " << keyInt%prime << std::endl;
+    if(keyInt < 0)
+        keyInt+=prime;
     std::string buf = toBitString(keyInt%prime);
-    std::cout << buf << std::endl;
-    key = std::string(buf.rbegin(),buf.rend());
+    key = std::string(buf.rbegin(),buf.rend()-1);
 }
