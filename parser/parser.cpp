@@ -9,15 +9,18 @@ Parser::Parser(int argc, char* argv[])
         if(argv[i][0] == '-')
         {
             if(key != " " && !args.count(key))
-                args[key] = '1';
+                args[key] = std::vector<std::string>{"1"};
             key = argv[i];
         }
         else
         {
             if(key != "")
-                args[key] = argv[i];
+                if(args.count(key))
+                    args[key].push_back(argv[i]);
+                else
+                    args[key] = std::vector<std::string>{argv[i]};
         }
     }
     if(key != " " && !args.count(key))
-        args[key] = '1';
+        args[key] = std::vector<std::string>{"1"};
 }
