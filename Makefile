@@ -2,7 +2,7 @@ RUN=g++
 CFLAGS=-std=c++20 -g -c
 SUBDIRS=method mode keygen parser
 LIBRARIES=-pthread
-SOURCES=method/method.cpp method/aesLookup.cpp method/aes.cpp mode/mode.cpp mode/cbc.cpp main.cpp
+SOURCES=method/method.cpp method/aesLookup.cpp method/aes.cpp mode/mode.cpp mode/cbc.cpp mode/cfb.cpp keygen/shamir.cpp parser/parser.cpp main.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXEC=run
 
