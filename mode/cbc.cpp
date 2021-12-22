@@ -2,10 +2,12 @@
 #include <random>
 #include <thread>
 #include <vector>
+#include <cstring>
 
 void CBC::encrypt(std::ostream& output, std::istream& input, std::string key)
 {
     u_char block[size];
+    memset(block,0,size*sizeof(u_char));
     u_char initVector[size];
 
     std::random_device rd;
@@ -15,14 +17,20 @@ void CBC::encrypt(std::ostream& output, std::istream& input, std::string key)
         initVector[i] = randint(gen);
 
     output.write(reinterpret_cast<char*>(initVector), size);
-    while(input.readsome(reinterpret_cast<char*>(block),size))
+    while(input.read(reinterpret_cast<char*>(block),size))
     {
         u_char buffer[size];
         for(int i = 0;i < size;i++)
             buffer[i] = block[i]^initVector[i];
         method->encrypt(initVector,buffer,method->expandKey(key.c_str()));
         output.write(reinterpret_cast<char*>(initVector), size);
+        memset(block,0,size*sizeof(u_char));
     }
+    u_char buffer[size];
+    for(int i = 0;i < size;i++)
+        buffer[i] = block[i]^initVector[i];
+    method->encrypt(initVector,buffer,method->expandKey(key.c_str()));
+    output.write(reinterpret_cast<char*>(initVector), size);
 }
 
 void CBC::decrypt(std::ostream& output, std::istream& input, size_t blocks, std::string key)
@@ -47,7 +55,10 @@ void CBC::decrypt(std::ostream& output, std::istream& input, size_t blocks, std:
             u_char buffer[size];
             for(int j = 0;j < size;j++)
                 buffer[j] = blockOutputs[i][j]^ blockInputs[i][j];
-            output.write(reinterpret_cast<char*>(buffer), size);
+            if(i < blocks-2)
+                output.write(reinterpret_cast<char*>(buffer), size);
+            else
+                output << reinterpret_cast<char*>(buffer);
         }
     }
 }

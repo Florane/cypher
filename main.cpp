@@ -116,8 +116,8 @@ int main(int argc, char* argv[])
 	}
 
 
-	std::ifstream input(parser.get(parser.check("-i")?"-i":"--input").c_str());
-	std::ofstream output(parser.get(parser.check("-o")?"-o":"--output").c_str());
+	std::ifstream input(parser.get(parser.check("-i")?"-i":"--input").c_str(),std::ios_base::binary);
+	std::ofstream output(parser.get(parser.check("-o")?"-o":"--output").c_str(),std::ios_base::binary);
 
 	Method* method = new AES;
 	Mode* mode;
