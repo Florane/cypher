@@ -2,6 +2,9 @@
 run
 .obsidian
 .vscode
-input
+input*
 output*
 share*
+config
+xml
+html
